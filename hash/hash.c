@@ -100,6 +100,8 @@ int hash_table_size(HashTable *h){
     return h->size;
 }
 
+
+
 void *hash_table_set(HashTable *h, void *key, void *val){
     int id = h->hash_fn(h, key) % h->size;
     HashTableItem *item = _hash_pair_find(h, key);
@@ -121,7 +123,6 @@ void *hash_table_set(HashTable *h, void *key, void *val){
 void *hash_table_get(HashTable *h, void *key){
     int id = h->hash_fn(h, key) % h->size;
     if(h->buckets[id] == NULL){
-        printf("erro, id invalido\n");
         return NULL;
     }
 

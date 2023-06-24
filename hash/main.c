@@ -33,7 +33,6 @@ int main(){
                 free(prev);
                 celula_destroy(cel);
             }
-            
         }
         
         else if (!strcmp(cmd, "GET")){

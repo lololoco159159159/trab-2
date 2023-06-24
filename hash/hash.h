@@ -28,6 +28,8 @@ HashTable *hash_table_construct(int table_size, HashFunction hash_fn, CmpFunctio
 // funcao para insercao/atualizacao de pares chave-valor em O(1).
 void *hash_table_set(HashTable *h, void *key, void *val);
 
+void *hash_table_set_item(HashTable *h, void *node);
+
 // retorna o valor associado com a chave key ou NULL se ela nao existir em O(1).
 void *hash_table_get(HashTable *h, void *key);
 
