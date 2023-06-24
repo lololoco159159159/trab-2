@@ -76,8 +76,6 @@ void *heap_push(Heap *heap, void *data, double priority){
 
     if (node != NULL){
         int i = 0;
-        printf("exist!\n");
-        exit(0);
         //atualiza na hash
         double *val = malloc(sizeof(double));
         *val = priority;
@@ -98,12 +96,11 @@ void *heap_push(Heap *heap, void *data, double priority){
         else{
             heap_desce_node(heap, i);
         }
-        imprime_lista_prioridade(heap);
+        //imprime_lista_prioridade(heap);
         return data;
     }
     //caso n existe ainda 
     else{
-        printf("n existe\n");
         double *val = malloc(sizeof(double));
         *val = priority;
         void *aux = hash_table_set(heap->h, data, val);
@@ -111,10 +108,6 @@ void *heap_push(Heap *heap, void *data, double priority){
             free(aux);
 
         node = (HeapNode*)hash_pair_find(heap->h, data);
-        if(st == 2){
-            printf("aqui\n");
-            //exit(0);
-        }
         
         if (heap->count >= heap->size){
             heap->nodes = realloc(heap->nodes, heap->size + HEAP_SIZE_SOMADOR);
@@ -130,36 +123,45 @@ void *heap_push(Heap *heap, void *data, double priority){
             i = Pai(i);
 
         }
-        imprime_lista_prioridade(heap);
+        //imprime_lista_prioridade(heap);
         return NULL;
     }
 }
 
 double heap_min_priority(Heap *heap){
+    if(heap->count <= 0){
+        printf("heap vazio!\n");
+        exit(0);
+    }
     return *(double*)heap->nodes[0]->prioridade;
 }
 
 void *heap_pop(Heap *heap){
-    if(heap->count == 0){
+    if(heap->count <= 0){
         printf("operacao invalida, heap vazio!");
         exit(0);
     }
     
     heap->count--;
-    HeapNode_swap(heap->nodes, 0, heap->count);
-    HeapNode *node = heap->nodes[heap->count];
-    heap_desce_node(heap, 0);
-   
-    hash_table_pop(heap->h, node->data);
-    void *aux;
-    if(node){
-        if(node->data)
-            aux = node->data;
-        if(node->prioridade)
-            free(node->prioridade);
+    
+    if(heap->count == 0){
+        HeapNode *n = heap->nodes[0];
+        void *aux = n->data;
+        void *val = hash_table_pop(heap->h, n->data);
+        if(val)
+            free(val);
+        return aux;
     }
-    free(node);
-    return aux;
+    else{
+        HeapNode_swap(heap->nodes, 0, heap->count);
+        HeapNode *node = heap->nodes[heap->count];
+        void *aux = node->data;
+        heap_desce_node(heap, 0);
+        void *val = hash_table_pop(heap->h, node->data);
+        if (val)
+            free(val);
+        return aux;
+    }
 }
 
 void heap_destroy(Heap *heap){

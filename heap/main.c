@@ -23,16 +23,16 @@ int main()
     HashTable *h = hash_table_construct(19, celula_hash, celula_cmp);
     Heap *heap = heap_construct(h);
 
-    printf("qtd: ");
+    //printf("qtd: ");
     scanf("%d", &n);
 
     
     for (i = 0; i < n; i++)
     {
-        printf("comando: ");
+        //printf("comando: ");
         scanf("\n%s", cmd);
 
-        if (!strcmp(cmd, "push"))
+        if (!strcmp(cmd, "PUSH"))
         {
             scanf("%d %d %d", &x, &y, &priority);
             Celula *cel = celula_create(x, y);
@@ -43,7 +43,7 @@ int main()
                 celula_destroy(cel);
         }
 
-        else if (!strcmp(cmd, "pop"))
+        else if (!strcmp(cmd, "POP"))
         {
             int priority = heap_min_priority(heap);
             Celula *cel = heap_pop(heap);
@@ -54,11 +54,8 @@ int main()
     
     
     HashTableIterator *it = hash_table_iterator(h);
-    int j = -1;
     while (!hash_table_iterator_is_over(it))
     {
-        j++;
-        printf("volta %d\n", j);
         HashTableItem *item = hash_table_iterator_next(it);
         Celula *cel = (Celula *)item->key;
         int *pos = (int *)item->val;

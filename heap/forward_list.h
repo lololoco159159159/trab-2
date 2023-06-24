@@ -135,7 +135,7 @@ void forward_list_clear(ForwardList *l);
  * @param val
  * Value to be removed from the linked list.
  */
-void forward_list_remove(ForwardList *l, data_type val);
+int forward_list_remove(ForwardList *l, data_type val);
 
 /**
  * @brief Removes all duplicate values from the linked list.

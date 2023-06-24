@@ -141,7 +141,11 @@ void *hash_table_pop(HashTable *h, void *key){
     }
 
     void *val = item->val;
-    forward_list_remove(h->buckets[id], item);
+    h->count--;
+    int aux = forward_list_remove(h->buckets[id], item);
+    if(aux == 1){
+        h->buckets[id] = NULL;
+    }
     _hash_pair_destruct(item);
 
     return val;
