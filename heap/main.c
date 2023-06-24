@@ -32,39 +32,33 @@ int main()
         printf("comando: ");
         scanf("\n%s", cmd);
 
-        if (!strcmp(cmd, "PUSH"))
+        if (!strcmp(cmd, "push"))
         {
             scanf("%d %d %d", &x, &y, &priority);
-            //double *prioridade = malloc(sizeof);
-            //*prioridade = priority;
             Celula *cel = celula_create(x, y);
-            //void *prev = hash_table_set(h, cel, prioridade);
             cel = heap_push(heap, cel, priority);
 
             // se a celula ja existia, lembre-se liberar a memoria alocada para a nova celula
             if (cel)
-                //free(prev);
                 celula_destroy(cel);
         }
 
-        /*
-        else if (!strcmp(cmd, "POP"))
+        else if (!strcmp(cmd, "pop"))
         {
             int priority = heap_min_priority(heap);
             Celula *cel = heap_pop(heap);
             printf("%d %d %d\n", cel->x, cel->y, priority);
             celula_destroy(cel);
         }
-        */
     }
     
-
-
-    /*
+    
     HashTableIterator *it = hash_table_iterator(h);
-
+    int j = -1;
     while (!hash_table_iterator_is_over(it))
     {
+        j++;
+        printf("volta %d\n", j);
         HashTableItem *item = hash_table_iterator_next(it);
         Celula *cel = (Celula *)item->key;
         int *pos = (int *)item->val;
@@ -75,7 +69,7 @@ int main()
     hash_table_iterator_destroy(it);
     hash_table_destroy(h);
     heap_destroy(heap);
-    */
+    
     return 0;
 }
 
