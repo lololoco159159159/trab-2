@@ -70,8 +70,6 @@ int heap_desce_node(Heap *heap, int i){
 
 void *heap_push(Heap *heap, void *data, double priority){
     //pega o node buscado caso existe e NULL caso contrario
-    static int st = 0;
-    st++;
     HeapNode *node = (HeapNode*)hash_pair_find(heap->h, data);
 
     if (node != NULL){
@@ -109,21 +107,31 @@ void *heap_push(Heap *heap, void *data, double priority){
 
         node = (HeapNode*)hash_pair_find(heap->h, data);
         
+        //printf("count: %d\n", heap->count);
         if (heap->count >= heap->size){
-            heap->nodes = realloc(heap->nodes, heap->size + HEAP_SIZE_SOMADOR);
-            heap->size += HEAP_SIZE_SOMADOR;
+            //printf("REALLOC!\n");
+            //heap->nodes = (HeapNode**)realloc(heap->nodes, heap->size + 2);
+
+            HeapNode **aux = (HeapNode**)malloc(sizeof(HeapNode*) *(heap->size * 2));
+            for(int k = 0; k < heap->count; k++){
+                aux[k] = heap->nodes[k];
+            }
+            free(heap->nodes);
+            heap->nodes = aux;
+            heap->size = heap->size*2;   
         }
-        
+ 
         int i = heap->count;
         heap->nodes[i] = node;
         heap->count++;
-        
+
         while (i > 0 && *(double*)heap->nodes[i]->prioridade < *(double*)heap->nodes[Pai(i)]->prioridade){
             HeapNode_swap(heap->nodes, i, Pai(i));
             i = Pai(i);
 
         }
         //imprime_lista_prioridade(heap);
+
         return NULL;
     }
 }
