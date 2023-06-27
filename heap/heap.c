@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define HEAP_SIZE_INICIAL 10
+#define HEAP_SIZE_INICIAL 40
 #define HEAP_SIZE_SOMADOR 10
 
 struct Heap{
@@ -72,7 +72,11 @@ void *heap_push(Heap *heap, void *data, double priority){
     //pega o node buscado caso existe e NULL caso contrario
     HeapNode *node = (HeapNode*)hash_pair_find(heap->h, data);
 
-    if (node != NULL){
+    if (node != NULL && priority < (*(double*)node->prioridade)){
+        int pos = ((node - heap->nodes[0])/ sizeof(HashTableItem));
+        printf("pos: %d\n", pos);
+        printf("antes: ");
+        imprime_lista_prioridade(heap);
         int i = 0;
         //atualiza na hash
         double *val = malloc(sizeof(double));
@@ -94,9 +98,16 @@ void *heap_push(Heap *heap, void *data, double priority){
         else{
             heap_desce_node(heap, i);
         }
-        //imprime_lista_prioridade(heap);
+        printf("depois: ");
+        imprime_lista_prioridade(heap);
         return data;
     }
+
+    //caso ja exista com valor menor
+    else if(node != NULL && priority >= (*(double*)node->prioridade)){
+        return data;
+    }
+    
     //caso n existe ainda 
     else{
         double *val = malloc(sizeof(double));
@@ -107,11 +118,7 @@ void *heap_push(Heap *heap, void *data, double priority){
 
         node = (HeapNode*)hash_pair_find(heap->h, data);
         
-        //printf("count: %d\n", heap->count);
         if (heap->count >= heap->size){
-            //printf("REALLOC!\n");
-            //heap->nodes = (HeapNode**)realloc(heap->nodes, heap->size + 2);
-
             HeapNode **aux = (HeapNode**)malloc(sizeof(HeapNode*) *(heap->size * 2));
             for(int k = 0; k < heap->count; k++){
                 aux[k] = heap->nodes[k];
@@ -125,15 +132,23 @@ void *heap_push(Heap *heap, void *data, double priority){
         heap->nodes[i] = node;
         heap->count++;
 
+        int pos = ((node - heap->nodes[0])/sizeof(node));
+        printf("%p %p\n", node, heap->nodes[0]);
+        printf("pos: %d\n", pos);
+        printf("antes: \n");
+        imprime_lista_prioridade(heap);
+
         while (i > 0 && *(double*)heap->nodes[i]->prioridade < *(double*)heap->nodes[Pai(i)]->prioridade){
             HeapNode_swap(heap->nodes, i, Pai(i));
             i = Pai(i);
 
         }
-        //imprime_lista_prioridade(heap);
+        printf("depois: \n");
+        imprime_lista_prioridade(heap);
 
         return NULL;
     }
+
 }
 
 double heap_min_priority(Heap *heap){

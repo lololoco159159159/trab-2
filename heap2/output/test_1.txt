@@ -66,4 +66,3 @@
 944 586 78
 907 968 86
 924 425 93
-The elapsed time is 0.000570 seconds

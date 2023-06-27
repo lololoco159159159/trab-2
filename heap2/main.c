@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include "heap.h"
-#include <time.h>
 
 typedef struct
 {
@@ -16,37 +15,32 @@ int celula_hash(HashTable *h, void *key);
 int celula_cmp(void *c1, void *c2);
 
 
-int main()
-{
-    clock_t begin = clock();
-    double time_spent = 0.0;
+int main(){
     int i = 0, n = 0, x = 0, y = 0, priority = 0;
     char cmd[10];
 
     HashTable *h = hash_table_construct(19, celula_hash, celula_cmp);
     Heap *heap = heap_construct(h);
 
-    //printf("qtd: ");
     scanf("%d", &n);
 
     
-    for (i = 0; i < n; i++)
-    {
-        //printf("comando: ");
+    for (i = 0; i < n; i++){
         scanf("\n%s", cmd);
 
         if (!strcmp(cmd, "PUSH"))
         {
             scanf("%d %d %d", &x, &y, &priority);
-            Celula *cel = celula_create(x, y);
-            cel = heap_push(heap, cel, priority);
-            printf("\n");
+            if(x >= 0 && y >= 0){
+                Celula *cel = celula_create(x, y);
+                cel = heap_push(heap, cel, priority);
 
-            // se a celula ja existia, lembre-se liberar a memoria alocada para a nova celula
-            if (cel)
-                celula_destroy(cel);
+                // se a celula ja existia, lembre-se liberar a memoria alocada para a nova celula
+                if (cel)
+                    celula_destroy(cel);
+            }
         }
-
+        
         else if (!strcmp(cmd, "POP"))
         {
             int priority = heap_min_priority(heap);
@@ -70,12 +64,9 @@ int main()
     hash_table_iterator_destroy(it);
     hash_table_destroy(h);
     heap_destroy(heap);
-    clock_t end = clock();
-    time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("The elapsed time is %f seconds", time_spent);
-    
     return 0;
 }
+
 
 Celula *celula_create(int x, int y){
     Celula *c = malloc(sizeof(Celula));
