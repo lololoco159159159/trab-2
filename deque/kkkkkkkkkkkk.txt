@@ -1,0 +1,21 @@
+crie um codigo deque.c que contem a estrutura Deque em formato bidimensional, com cada um dos arrays com espaco de 5 elementos do tipo int val, isso significa que devem ser armazenados n arrays, cada um de tamanho 5.
+Quando um array de 5 elementos ficar completo, deve ser inserido o novo elemento no próximo array, não deve ser feito realloc do array para uma quantidade maior que 5, mas sim alocar novos arrays de tamanho 5 para armazenar novos valores.
+Deve ser criado as funcoes 
+
+
+
+void deque_push_back(Deque *d, int val);
+void deque_push_front(Deque *d,int val);
+void *deque_pop_back(Deque *d);
+void *deque_pop_front(Deque *d);
+e mais auxiliares caso necessario.
+as funcoes de push devem alocar novos arrays caso necessario e as de pop desalocar arrays caso fiquem livres, o acesso ao i-ésimo elemento deve ser feito de maneira constante, por meio do cálculo de sua posição: 
+TAM = (BLOCO_FIM – BLOCO_INI) * TAM_BLOCO + (FIM – INÍCIO)
+POS_ITEM = INÍCIO + IDX
+BLOCO_IDX = INT(POS_ITEM / TAM_BLOCO)
+ITEM_IDX = POS_ITEM % TAM_BLOCO
+Vale ressaltar que o deque-
+
+
+
+
