@@ -57,7 +57,7 @@ Deque *redimensiona_deque(Deque *d){
     return d;
 }
 
-void deque_push_front(Deque *d, void *val){
+void deque_push_back(Deque *d, void *val){
     if(d->blocos == NULL){
         d->blocos = (void***)malloc(sizeof(void**) * d->blocos_size);
         for(int i = 0; i < TAM_INICIAL; i++){
@@ -93,7 +93,7 @@ void deque_push_front(Deque *d, void *val){
     //imprime_deque(d);
 }
 
-void deque_push_back(Deque *d, void *val){
+void deque_push_front(Deque *d, void *val){
     if(d->blocos == NULL){
         d->blocos = (void***)malloc(sizeof(void**) * d->blocos_size);
         for(int i = 0; i < d->blocos_size; i++){
@@ -167,19 +167,19 @@ void deque_destroy(Deque *d){
     free(d);
 }
 
-void *deque_pop_back(Deque *d){
+void *deque_pop_front(Deque *d){
     if((d->inicio == d->fim) || d->blocos == NULL){
         return NULL;
     }
     void *ret = d->blocos[d->inicio/TAM_BLOCO][d->inicio%TAM_BLOCO];
     d->blocos[d->inicio/TAM_BLOCO][d->inicio%TAM_BLOCO] = NULL;
     d->inicio++;
-    d->bloco_fim = d->inicio / TAM_BLOCO;
+    d->bloco_ini = d->inicio / TAM_BLOCO;
     //imprime_deque(d);
     return ret;
 }
 
-void *deque_pop_front(Deque *d){
+void *deque_pop_back(Deque *d){
     if((d->inicio == d->fim) || d->blocos == NULL){
         return NULL;
     }

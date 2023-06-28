@@ -90,7 +90,7 @@ void *heap_push(Heap *heap, void *data, double priority){
         int idx = *(int*)node->val;
 
         if(priority >= heap->nodes[idx]->prioridade){
-            imprime_lista_prioridade(heap);
+            //imprime_lista_prioridade(heap);
             return data;
         }
         heap->nodes[idx]->prioridade = priority;
@@ -101,7 +101,7 @@ void *heap_push(Heap *heap, void *data, double priority){
         else{
             heap_desce_node(heap, idx);
         }
-        imprime_lista_prioridade(heap);
+        //imprime_lista_prioridade(heap);
         return data;
     }
     
@@ -128,7 +128,7 @@ void *heap_push(Heap *heap, void *data, double priority){
         hash_table_set(heap->h, data, idx);
 
         heap_sobe_node(heap, i);
-        imprime_lista_prioridade(heap);
+        //imprime_lista_prioridade(heap);
         return NULL;
     }
 }
@@ -152,7 +152,7 @@ void *heap_pop(Heap *heap){
         if(val)
             free(val);
         free(n);
-        imprime_lista_prioridade(heap);
+        //imprime_lista_prioridade(heap);
         return aux;
     }
     else{
@@ -164,7 +164,7 @@ void *heap_pop(Heap *heap){
         if (val)
             free(val);
         free(n);
-        imprime_lista_prioridade(heap);
+        //imprime_lista_prioridade(heap);
         return aux;
     }
 }

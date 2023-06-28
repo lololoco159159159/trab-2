@@ -111,6 +111,8 @@ void *hash_table_set(HashTable *h, void *key, void *val){
     if(h->buckets[id] == NULL){
         h->buckets[id] = forward_list_construct();
     }
+
+    
     h->count++;
     forward_list_push_back(h->buckets[id], _hash_pair_construct(key, val));
     return NULL;
@@ -188,8 +190,6 @@ void hash_table_iterator_destroy(HashTableIterator *it){
 CmpFunction get_CmpFunction(HashTable *h){
     return h->cmp_fn;
 }
-
-
 
 
 

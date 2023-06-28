@@ -27,10 +27,11 @@ int main(){
     
     for (i = 0; i < n; i++){
         scanf("\n%s", cmd);
-
+        //printf("\n\nlinha: %d\n", i+2);
         if (!strcmp(cmd, "PUSH"))
         {
             scanf("%d %d %d", &x, &y, &priority);
+            //printf("p %d %d %d\n\n\n", x, y, priority);
             if(x >= 0 && y >= 0){
                 Celula *cel = celula_create(x, y);
                 cel = heap_push(heap, cel, priority);
@@ -43,6 +44,7 @@ int main(){
         
         else if (!strcmp(cmd, "POP"))
         {
+            //printf("pp\n\n");
             int priority = heap_min_priority(heap);
             Celula *cel = heap_pop(heap);
             printf("%d %d %d\n", cel->x, cel->y, priority);

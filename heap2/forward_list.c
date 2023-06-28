@@ -57,12 +57,12 @@ void forward_list_push_front(ForwardList *l, data_type data)
 void forward_list_push_back(ForwardList *l, data_type data)
 {
     Node *new_node = node_construct(data, NULL);
-
     if (l->last == NULL)
         l->head = l->last = new_node;
-    else
-        l->last = l->last->next = new_node;
-
+    else{
+        l->last->next = new_node;
+        l->last = new_node;
+    }
     l->size++;
 }
 
@@ -140,22 +140,28 @@ void forward_list_clear(ForwardList *l)
 int forward_list_remove(ForwardList *l, data_type val){
     Node *n = l->head;
     Node *prev = NULL;
-    Node *new_n = NULL;
 
     while (n != NULL){
         if (n->value == val){
-            if (prev == NULL){
-                new_n = n->next;
-                l->head = new_n;
+            l->size--;
+            if(l->last->value == val){
+                l->last = prev;
+                if(prev != NULL)
+                    prev->next = NULL;
+            }
+            else if (prev == NULL){
+                if(n->next == NULL){
+                    l->head = NULL;
+                    l->last = NULL;
+                }
+                else
+                    l->head = n->next;
             }
             else{
-                new_n = n->next;
-                prev->next = new_n;
+                prev->next = n->next;
             }
 
             node_destroy(n);
-            n = new_n;
-            l->size--;
 
             if(l->size == 1)
                 l->last = l->head;
