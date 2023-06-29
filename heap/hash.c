@@ -3,7 +3,7 @@
 #include <string.h>
 #include "hash.h"
 #include "forward_list.h"
-
+ 
 
 struct HashTable{
     int count;
@@ -38,7 +38,6 @@ int hash_table_iterator_is_over(HashTableIterator *it){
     return(it->current_element >= it->hash_table->count);
 }
 
-
 HashTableItem *_hash_pair_construct(void *key, void *val){
     HashTableItem *item = (HashTableItem*)malloc(sizeof(HashTableItem));
     item->key = key;
@@ -46,10 +45,9 @@ HashTableItem *_hash_pair_construct(void *key, void *val){
     return item;
 }
 
-HashTableItem *_hash_pair_find(HashTable *h, void *key){
+HashTableItem *hash_pair_find(HashTable *h, void *key){
     int id = h->hash_fn(h, key) % h->size;
     ForwardList *l = h->buckets[id];
-    
     
     if(l == NULL){
         return NULL;
@@ -102,7 +100,7 @@ int hash_table_size(HashTable *h){
 
 void *hash_table_set(HashTable *h, void *key, void *val){
     int id = h->hash_fn(h, key) % h->size;
-    HashTableItem *item = _hash_pair_find(h, key);
+    HashTableItem *item = hash_pair_find(h, key);
 
     if(item != NULL){
         void *prev_val = item->val;
@@ -113,6 +111,8 @@ void *hash_table_set(HashTable *h, void *key, void *val){
     if(h->buckets[id] == NULL){
         h->buckets[id] = forward_list_construct();
     }
+
+    
     h->count++;
     forward_list_push_back(h->buckets[id], _hash_pair_construct(key, val));
     return NULL;
@@ -121,12 +121,11 @@ void *hash_table_set(HashTable *h, void *key, void *val){
 void *hash_table_get(HashTable *h, void *key){
     int id = h->hash_fn(h, key) % h->size;
     if(h->buckets[id] == NULL){
-        printf("erro, id invalido\n");
         return NULL;
     }
 
     else{
-        HashTableItem *item = _hash_pair_find(h, key);
+        HashTableItem *item = hash_pair_find(h, key);
         if(item == NULL){
             return NULL;
         }
@@ -135,15 +134,23 @@ void *hash_table_get(HashTable *h, void *key){
 }
 
 void *hash_table_pop(HashTable *h, void *key){
+    if(h->count == 0){
+        printf("hash table vazia\n");
+        exit(0);
+    }
     int id = h->hash_fn(h, key) % h->size;
-    HashTableItem *item = _hash_pair_find(h, key);
+    HashTableItem *item = hash_pair_find(h, key);
 
     if(item == NULL){
         return NULL;
     }
 
     void *val = item->val;
-    forward_list_remove(h->buckets[id], item);
+    h->count--;
+    int aux = forward_list_remove(h->buckets[id], item);
+    if(aux == 1){
+        h->buckets[id] = NULL;
+    }
     _hash_pair_destruct(item);
 
     return val;
@@ -154,7 +161,6 @@ void hash_table_destroy(HashTable *h){
     for(id = 0; id < h->size; id++){
         if (h->buckets[id] == NULL)
             continue;
-        _hash_pair_forwarlist_destruct(h->buckets[id]);
         forward_list_destroy(h->buckets[id]);
     }
     free(h->buckets);
@@ -180,4 +186,12 @@ HashTableItem* hash_table_iterator_next(HashTableIterator *it){
 void hash_table_iterator_destroy(HashTableIterator *it){
     free(it);
 }
+
+CmpFunction get_CmpFunction(HashTable *h){
+    return h->cmp_fn;
+}
+
+
+
+
 

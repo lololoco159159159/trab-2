@@ -57,12 +57,12 @@ void forward_list_push_front(ForwardList *l, data_type data)
 void forward_list_push_back(ForwardList *l, data_type data)
 {
     Node *new_node = node_construct(data, NULL);
-
     if (l->last == NULL)
         l->head = l->last = new_node;
-    else
-        l->last = l->last->next = new_node;
-
+    else{
+        l->last->next = new_node;
+        l->last = new_node;
+    }
     l->size++;
 }
 
@@ -137,31 +137,48 @@ void forward_list_clear(ForwardList *l)
         forward_list_pop_front(l);
 }
 
-void forward_list_remove(ForwardList *l, data_type val)
-{
+int forward_list_remove(ForwardList *l, data_type val){
     Node *n = l->head;
     Node *prev = NULL;
-    Node *new_n = NULL;
 
-    while (n != NULL)
-    {
-        if (n->value == val)
-        {
-            if (prev == NULL)
-                l->head = new_n = n->next;
-            else
-                prev->next = new_n = n->next;
+    while (n != NULL){
+        if (n->value == val){
+            l->size--;
+            if(l->last->value == val){
+                l->last = prev;
+                if(prev != NULL)
+                    prev->next = NULL;
+            }
+            else if (prev == NULL){
+                if(n->next == NULL){
+                    l->head = NULL;
+                    l->last = NULL;
+                }
+                else
+                    l->head = n->next;
+            }
+            else{
+                prev->next = n->next;
+            }
 
             node_destroy(n);
-            n = new_n;
-            l->size--;
+
+            if(l->size == 1)
+                l->last = l->head;
+            if(l->size == 0){
+                l->head = NULL;
+                l->last = NULL;
+                forward_list_destroy(l);
+                return 1;
+            }
+            return 0;
         }
-        else
-        {
+        else{
             prev = n;
             n = n->next;
         }
     }
+    return 0;
 }
 
 void forward_list_unique(ForwardList *l)
@@ -185,12 +202,12 @@ void forward_list_sort(ForwardList *l)
     // TODO
 }
 
-void forward_list_destroy(ForwardList *l)
-{
+void forward_list_destroy(ForwardList *l){
     Node *n = l->head;
     while (n != NULL)
     {
         Node *next = n->next;
+        free(n->value);
         node_destroy(n);
         n = next;
     }

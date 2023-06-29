@@ -62,4 +62,11 @@ int hash_table_iterator_is_over(HashTableIterator *it);
 //desaloca o iterator da hash table
 void hash_table_iterator_destroy(HashTableIterator *it);
 
+CmpFunction get_CmpFunction(HashTable *h);
+
+//retorna o HashTableItem associado a chave
+HashTableItem *hash_pair_find(HashTable *h, void *key);
+
+
+
 #endif
