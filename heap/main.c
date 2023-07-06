@@ -90,7 +90,6 @@ int celula_hash(HashTable *h, void *key){
 int celula_cmp(void *c1, void *c2){
     Celula *a = (Celula *)c1;
     Celula *b = (Celula *)c2;
-    //printf("(%d %d) (%d %d)\n", a->x, a->y, b->x, b->y);
     if (a->x == b->x && a->y == b->y)
         return 0;
     else

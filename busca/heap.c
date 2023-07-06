@@ -133,6 +133,14 @@ void *heap_push(Heap *heap, void *data, double priority){
     }
 }
 
+int heap_verifica_celula_contida(Heap *heap, void *key){
+    HashTableItem *node = (HashTableItem*)hash_pair_find(heap->h, key);
+    if(node == NULL)
+        return 0;
+    return 1;
+}
+
+
 double heap_min_priority(Heap *heap){
     return heap->nodes[0]->prioridade;
 }
@@ -176,9 +184,6 @@ void heap_destroy(Heap *heap){
     free(heap);
 }
 
-
-
-
-
-
-
+int heap_empty(Heap *heap){
+    return heap->count == 0;
+}

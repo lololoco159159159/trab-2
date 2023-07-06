@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "cmath": "c",
-        "algorithms.h": "c"
+        "algorithms.h": "c",
+        "labirinto.h": "c"
     }
 }

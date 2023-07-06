@@ -30,7 +30,7 @@ int main()
         result = depth_first_search(lab, inicio, fim);
     }
     else if (!strcmp(algoritmo, "A*")){
-        //result = a_star(lab, inicio, fim);
+        result = a_star(lab, inicio, fim);
     }
     if (!strcmp(algoritmo, "DUMMY")){
         //result = dummy_search(lab, inicio, fim);
