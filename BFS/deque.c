@@ -1,4 +1,5 @@
 #include "deque.h"
+#include "algorithms.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -67,7 +68,7 @@ void deque_push_back(Deque *d, void *val){
         d->bloco_fim = d->blocos_size/2;
         d->inicio = d->bloco_ini * TAM_BLOCO;
         d->fim = d->bloco_ini * TAM_BLOCO;
-        d->blocos[d->bloco_fim] = (void**)malloc(sizeof(void*) * TAM_BLOCO);
+        d->blocos[d->bloco_fim] = (void**)calloc(TAM_BLOCO, sizeof(void*));
         //printf("inicio: %d  Fim: %d     bloco_inicio: %d    bloco_fim: %d\n", d->inicio, d->fim, d->bloco_ini, d->bloco_fim);
     }
     
@@ -103,7 +104,7 @@ void deque_push_front(Deque *d, void *val){
         d->bloco_fim = d->blocos_size/2;
         d->inicio = d->bloco_ini * TAM_BLOCO;
         d->fim = d->bloco_ini * TAM_BLOCO;
-        d->blocos[d->bloco_fim] = (void**)malloc(sizeof(void*) * TAM_BLOCO);
+        d->blocos[d->bloco_fim] = (void**)calloc(TAM_BLOCO, sizeof(void*));
         //printf("inicio: %d  Fim: %d     bloco_inicio: %d    bloco_fim: %d\n", d->inicio, d->fim, d->bloco_ini, d->bloco_fim);
         //printf("iniciei\n");
     }
@@ -167,6 +168,27 @@ void deque_destroy(Deque *d){
     free(d);
 }
 
+void deque_free_fn(Deque *d, free_fn fn){
+    if(d != NULL){        
+        if(d->blocos != NULL){
+            for(int i = 0; i < d->blocos_size; i++){
+                if(d->blocos[i] != NULL){
+                    for(int k = 0; k < TAM_BLOCO; k++){
+                        if(d->blocos[i][k] != NULL){
+                            fn(d->blocos[i][k]);
+                        }
+                        else
+                            continue;
+                    }
+                    free(d->blocos[i]);
+                }
+            }
+            free(d->blocos);
+        }
+        free(d);
+    }
+}
+
 void *deque_pop_front(Deque *d){
     if((d->inicio == d->fim) || d->blocos == NULL){
         return NULL;
@@ -191,4 +213,9 @@ void *deque_pop_back(Deque *d){
     return ret;
 }
 
-
+int deque_empty(Deque *d){
+    if(d->inicio == d->fim){
+        return 1;
+    }
+    return 0;
+}

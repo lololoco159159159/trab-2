@@ -9,26 +9,26 @@ struct Queue{
 
 Queue *queue_construct(){
     Queue *queue = (Queue*)malloc(sizeof(Queue));
-    queue->list = list_construct();
+    queue->list = forward_list_construct();
     return queue;
 }
 
 void queue_destroy(Queue *s){
-    list_destroy(s->list);
+    forward_list_destroy(s->list);
     free(s);
 }
 
 
 data_type queue_dequeue(Queue *queue){
-    data_type data = list_pop_front(queue->list);
+    data_type data = forward_list_pop_front(queue->list);
     return data;
 }
 
 void queue_enqueue(Queue *queue, data_type value){
-    list_push_back(queue->list, value);
+    forward_list_push_back(queue->list, value);
 
 }
 
 bool queue_empty(Queue *s){
-    return !list_size(s->list);
+    return !forward_list_size(s->list);
 }
