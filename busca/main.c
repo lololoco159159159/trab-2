@@ -27,7 +27,7 @@ int main()
     if (!strcmp(algoritmo, "BFS"))
         result = breadth_first_search(lab, inicio, fim);
     else if (!strcmp(algoritmo, "DFS")){
-        //result = depth_first_search(lab, inicio, fim);
+        result = depth_first_search(lab, inicio, fim);
     }
     else if (!strcmp(algoritmo, "A*")){
         //result = a_star(lab, inicio, fim);
